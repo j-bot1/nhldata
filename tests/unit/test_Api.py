@@ -2,8 +2,9 @@
 
 import responses
 import pytest
+import json
 from enum import Enum
-from ...src.core import Api
+from nhldata.core import Api
 
 
 __EXAMPLE_API__ = "http://example.api.com/api"
@@ -11,17 +12,32 @@ __EXAMPLE_API__ = "http://example.api.com/api"
 
 class API_URL(Enum):
     example = __EXAMPLE_API__
+    not_actually_an_endpoint = f"{__EXAMPLE_API__}/wrong"
 
 
 class TestApiStatusAndConnection:
     def test_connection_error(self):
+
+        url = __EXAMPLE_API__
+        body = b"test callback"
+        status = 200
+        headers = {"foo": "bar"}
+
+        def request_callback(request):
+            return (status, headers, body)
+
         @responses.activate
         def run(self):
-            responses.add(responses.GET, __EXAMPLE_API__)
+            responses.add_callback(
+                responses.GET,
+                url,
+                request_callback,
+                content_type=None,
+            )
 
-            with pytest.raises(ConnectionError):
-                Api = Api(API_URL.example)
-                x.get()
+            with pytest.raises(Exception):
+                x = Api(API_URL.not_actually_an_endpoint)
+                x.request()
 
         run(self)
 
@@ -48,7 +64,7 @@ class TestApiStatusAndConnection:
 
             with pytest.raises(Exception):
                 x = Api(API_URL.example)
-                x.get()
+                x.request()
 
         run()
 
@@ -75,7 +91,7 @@ class TestApiStatusAndConnection:
 
             try:
                 x = Api(API_URL.example)
-                x.get()
+                x.request()
             except:
                 assert False
 
@@ -109,10 +125,11 @@ class TestApiDict:
             )
 
             x = Api(API_URL.example)
-            x.get()
+            x.request()
             actual = x.to_dict()
 
             assert isinstance(actual, dict)
+            assert actual["y"]["some_strings"] == ["a", "b", "c", "d"]
             assert actual == expected
 
         run(expected)
@@ -148,7 +165,7 @@ class TestApiDict:
             )
 
             x = Api(API_URL.example, params=params)
-            x.get()
+            x.request()
             actual = x.to_dict()
 
             assert isinstance(actual, dict)
