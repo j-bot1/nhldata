@@ -54,38 +54,3 @@ class Division(Enum):
     metropolitan = "18"
     pacific = "15"
     central = "16"
-
-
-class API_URL_root(Enum):
-    """an enumeration of the NHL api URL root"""
-
-    stats = "https://statsapi.web.nhl.com/api/v1"
-    records = "https://records.nhl.com/site/api"
-
-
-class API_URL(Enum):
-    """base urls for api endpoints. Many of these take modifiers to refine the query."""
-
-    play_by_play = f"{API_URL_root.stats.value}/game/ID/feed/live"
-    schedule = f"{API_URL_root.stats.value}/schedule"
-    standings = f"{API_URL_root.stats.value}/standings"
-    franchise = f"{API_URL_root.stats.value}/franchises"
-    teams = f"{API_URL_root.stats.value}/teams"
-    division = f"{API_URL_root.stats.value}/divisions"
-    conference = f"{API_URL_root.stats.value}/conferences"
-    people = f"{API_URL_root.stats.value}/people"
-    game_types = f"{API_URL_root.stats.value}/gameTypes"
-    game_status = f"{API_URL_root.stats.value}/gameStatus"
-    play_types = f"{API_URL_root.stats.value}/playTypes"
-    tournament_types = f"{API_URL_root.stats.value}/tournamentTypes"
-    playoffs = f"{API_URL_root.stats.value}/tournaments/playoffs"
-    seasons = f"{API_URL_root.stats.value}/seasons"
-    current_season = f"{API_URL_root.stats.value}/seasons/current"
-    standing_types = f"{API_URL_root.stats.value}/standingsTypes"
-    stats_types = f"{API_URL_root.stats.value}/statTypes"
-    draft = f"{API_URL_root.stats.value}/draft"
-    prospects = f"{API_URL_root.stats.value}/prospects"
-    awards = f"{API_URL_root.stats.value}/awards"
-    venues = f"{API_URL_root.stats.value}/venues"
-    event_types = f"{API_URL_root.stats.value}/eventTypes"
-    performer_types = f"{API_URL_root.stats.value}/performerTypes"
