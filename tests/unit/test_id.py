@@ -1,8 +1,7 @@
 """unit tests for finding game ids"""
 
-from nhldata.core import GameId
+from nhldata.id import GameId
 from nhldata.data import Team
-import responses
 
 
 class TestGameId:
@@ -12,10 +11,10 @@ class TestGameId:
         expected = ["2022020466", "2022020467", "2022020468"]
 
         # actual result
-        game_ids = GameId(on_date="2022-12-14")
-        game_ids.find_ids()
+        g_id = GameId(date="2022-12-14")
+        g_id.find_ids()
 
-        actual = game_ids.to_list()
+        actual = g_id.game_ids
         assert isinstance(actual, list)
         assert all(isinstance(id, str) for id in actual)
         assert len(expected) == len(actual)
@@ -27,10 +26,10 @@ class TestGameId:
         expected = [str(x) for x in range(2022020448, 2022020469)]
 
         # actual result
-        game_ids = GameId(between_dates=("2022-12-12", "2022-12-14"))
-        game_ids.find_ids()
+        g_id = GameId(date=("2022-12-12", "2022-12-14"))
+        g_id.find_ids()
 
-        actual = game_ids.to_list()
+        actual = g_id.game_ids
 
         assert isinstance(actual, list)
         assert all(isinstance(id, str) for id in actual)
@@ -43,10 +42,10 @@ class TestGameId:
         expected = ["2022020448", "2022020466"]
 
         # actual result
-        game_ids = GameId(between_dates=("2022-12-12", "2022-12-14"), team=Team.MTL)
-        game_ids.find_ids()
+        g_id = GameId(date=("2022-12-12", "2022-12-14"), team=Team.MTL)
+        g_id.find_ids()
 
-        actual = game_ids.to_list()
+        actual = g_id.game_ids
 
         assert isinstance(actual, list)
         assert all(isinstance(id, str) for id in actual)
@@ -65,13 +64,13 @@ class TestGameId:
         ]
 
         # actual result
-        game_ids = GameId(
-            between_dates=("2022-12-12", "2022-12-14"),
+        g_id = GameId(
+            date=("2022-12-12", "2022-12-14"),
             team=[Team.MTL, Team.SEA, Team.DET],
         )
-        game_ids.find_ids()
+        g_id.find_ids()
 
-        actual = game_ids.to_list()
+        actual = g_id.game_ids
 
         assert isinstance(actual, list)
         assert all(isinstance(id, str) for id in actual)
